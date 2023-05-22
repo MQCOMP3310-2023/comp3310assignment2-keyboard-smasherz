@@ -23,7 +23,7 @@ def newRestaurant():
       return redirect(url_for('main.showRestaurants'))
   else:
       return render_template('newRestaurant.html')
-
+#
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
 def editRestaurant(restaurant_id):
