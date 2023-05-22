@@ -12,7 +12,7 @@ class Restaurant(db.Model):
            'id'           : self.id,
        }
  
-class MenuItem(db.Model):
+class menu_item(db.Model):
     name = db.Column(db.String(80), nullable = False)
     id = db.Column(db.Integer, primary_key = True)
     description = db.Column(db.String(250))
