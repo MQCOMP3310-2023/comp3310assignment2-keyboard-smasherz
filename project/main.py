@@ -14,6 +14,12 @@ def show_restaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
 
+@main.route('/restaurant/search/<string:search_term>/')
+def show_restaurants_search(search_term):
+  restaurants = db.session.query(Restaurant).filter_by(name = search_term).order_by(asc(Restaurant.name))
+  return render_template('restaurants.html', restaurants = restaurants)
+
+
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
 def new_restaurant():

@@ -28,3 +28,9 @@ def restaurants_json():
     return pyjs.dumps(rest_list)
 
 
+@json.route('/restaurant/search/<string:search_term>/JSON')
+def restaurant_menu_search_json(search_term):
+    sql_request = text('select * from menu_item where restaurant_id = ' + str(search_term))
+    restaurants = db.session.execute(sql_request) #changed sting building method to 
+    rest_list = [ r._asdict() for r in restaurants ]
+    return pyjs.dumps(rest_list)
