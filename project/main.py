@@ -14,10 +14,12 @@ def show_restaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
 
-@main.route('/restaurant/search/<string:search_term>/')
-def show_restaurants_search(search_term):
-  restaurants = db.session.query(Restaurant).filter_by(name = search_term).order_by(asc(Restaurant.name))
-  return render_template('restaurants.html', restaurants = restaurants)
+#Search for restaurants
+@main.route('/restaurant/search/', methods=['GET'])
+def search_restaurants():
+    search_term = request.args.get('query')
+    restaurants = db.session.query(Restaurant).filter_by(name=search_term).order_by(asc(Restaurant.name)).all()
+    return render_template('restaurants.html', restaurants=restaurants)
 
 
 #Create a new restaurant
