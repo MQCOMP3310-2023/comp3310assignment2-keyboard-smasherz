@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, menu_item
+from .models import Restaurant, menu_item, requestedRestaurant
 from sqlalchemy import asc
 from . import db
 
@@ -33,6 +33,17 @@ def new_restaurant():
       return redirect(url_for(main_show_restaurants))
   else:
       return render_template('newRestaurant.html')
+
+@main.route('/restaurant/request/', methods=['GET','POST'])
+def request_restaurant():
+  if request.method == 'POST':
+      request_restaurant = requestedRestaurant(name = request.form['name'])
+      db.session.add(request_restaurant)
+      flash('New Restaurant %s Successfully Requested' % request_restaurant.name)
+      db.session.commit()
+      return redirect(url_for(main_show_restaurants))
+  else:
+      return render_template('requestRestaurant.html')
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])

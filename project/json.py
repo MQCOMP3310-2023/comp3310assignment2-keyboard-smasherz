@@ -27,6 +27,12 @@ def restaurants_json():
     rest_list = [ r._asdict() for r in restaurants ]
     return pyjs.dumps(rest_list)
 
+@json.route('/restaurant/requested/JSON')
+def request_restaurants_json():
+    requested_restaurant = db.session.execute(text('select * from requested_restaurant'))
+    rest_list = [ r._asdict() for r in requested_restaurant ]
+    return pyjs.dumps(rest_list)
+
 
 @json.route('/restaurant/search/<string:search_term>/JSON')
 def restaurant_menu_search_json(search_term):

@@ -6,12 +6,25 @@ class Restaurant(db.Model):
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name'         : self.name,
-           'id'           : self.id,
-       }
- 
+    #Return object data in easily serializeable format"""
+        return {
+            'name'         : self.name,
+            'id'           : self.id,
+        }
+    
+class requestedRestaurant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
+
+    @property
+    def serialize(self):
+    #Return object data in easily serializeable format"""
+        return {
+            'name'         : self.name,
+            'id'           : self.id,
+        }
+
+
 class menu_item(db.Model):
     name = db.Column(db.String(80), nullable = False)
     id = db.Column(db.Integer, primary_key = True)
@@ -23,12 +36,12 @@ class menu_item(db.Model):
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name'       : self.name,
-           'description' : self.description,
-           'id'         : self.id,
-           'price'      : self.price,
-           'course'     : self.course,
-       }
+    #   """Return object data in easily serializeable format"""
+        return {
+            'name'       : self.name,
+            'description' : self.description,
+            'id'         : self.id,
+            'price'      : self.price,
+            'course'     : self.course,
+        }
 
