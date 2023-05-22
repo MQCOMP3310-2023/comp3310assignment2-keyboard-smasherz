@@ -37,7 +37,7 @@ def new_restaurant():
 @main.route('/restaurant/request/', methods=['GET','POST'])
 def request_restaurant():
   if request.method == 'POST':
-      request_restaurant = requestedRestaurant(name = request.form['name'])
+      request_restaurant = requestedRestaurant(name = request.form['name'], address = request.form['address'])
       db.session.add(request_restaurant)
       flash('New Restaurant %s Successfully Requested' % request_restaurant.name)
       db.session.commit()
