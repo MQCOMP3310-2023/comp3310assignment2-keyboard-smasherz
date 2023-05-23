@@ -55,7 +55,7 @@ def edit_restaurant(restaurant_id):
         flash('Restaurant Successfully Edited %s' % edited_restaurant.name)
         return redirect(url_for(main_show_restaurants))
   else:
-    return render_template('edit_restaurant.html', restaurant = edited_restaurant)
+    return render_template('editRestaurant.html', restaurant = edited_restaurant)
 
 
 #Delete a restaurant
@@ -68,7 +68,7 @@ def delete_restaurant(restaurant_id):
     db.session.commit()
     return redirect(url_for(main_show_restaurants, restaurant_id = restaurant_id))
   else:
-    return render_template('delete_restaurant.html',restaurant = restaurant_to_delete)
+    return render_template('deleteRestaurant.html',restaurant = restaurant_to_delete)
 
 #Show a restaurant menu
 @main.route('/restaurant/<int:restaurant_id>/')
@@ -90,7 +90,7 @@ def new_menu_item(restaurant_id):
       flash('New Menu %s Item Successfully Created' % (new_item.name))
       return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
   else:
-      return render_template('new_menu_item.html', restaurant_id = restaurant_id)
+      return render_template('newmenuitem.html', restaurant_id = restaurant_id)
 
 #Edit a menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET','POST'])
@@ -111,7 +111,7 @@ def edit_menu_item(restaurant_id, menu_id):
         flash('Menu Item Successfully Edited')
         return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
     else:
-        return render_template('edit_menu_item.html', restaurant_id = restaurant_id, menu_id = menu_id, item = edited_item)
+        return render_template('editmenuitem.html', restaurant_id = restaurant_id, menu_id = menu_id, item = edited_item)
 
 
 #Delete a menu item
@@ -124,4 +124,4 @@ def delete_menu_item(restaurant_id,menu_id):
         flash('Menu Item Successfully Deleted')
         return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
     else:
-        return render_template('delete_menu_item.html', item = item_to_delete)
+        return render_template('deletemenuitem.html', item = item_to_delete)
