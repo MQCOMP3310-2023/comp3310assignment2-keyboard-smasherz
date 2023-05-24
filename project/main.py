@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, menu_item
+from .models import Restaurant, menu_item, requestedRestaurant
 from sqlalchemy import asc
 from . import db
 
 main = Blueprint('main', __name__)
-main_show_restaurants = 'main.showRestaurants'
-main_show_menu = 'main.showRestaurants'
+main_show_restaurants = 'main.show_restaurants'
+main_show_menu = 'main.show_restaurants'
 
 #Show all restaurants
 @main.route('/')
@@ -13,6 +13,18 @@ main_show_menu = 'main.showRestaurants'
 def show_restaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
+
+#login
+@main.route('/restaurant/login')
+def login():
+  return render_template('login.html')
+
+#Search for restaurants
+@main.route('/restaurant/search/', methods=['GET'])
+def search_restaurants():
+    search_term = request.args.get('query')
+    restaurants = db.session.query(Restaurant).filter_by(name=search_term).order_by(asc(Restaurant.name)).all()
+    return render_template('restaurants.html', restaurants=restaurants)
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
@@ -25,6 +37,18 @@ def new_restaurant():
       return redirect(url_for(main_show_restaurants))
   else:
       return render_template('newRestaurant.html')
+
+#Request new restaurant 
+@main.route('/restaurant/request/', methods=['GET','POST'])
+def request_restaurant():
+  if request.method == 'POST':
+      request_restaurant = requestedRestaurant(name = request.form['name'], address = request.form['address'])
+      db.session.add(request_restaurant)
+      flash('New Restaurant %s Successfully Requested' % request_restaurant.name)
+      db.session.commit()
+      return redirect(url_for(main_show_restaurants))
+  else:
+      return render_template('requestRestaurant.html')
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
@@ -105,4 +129,4 @@ def delete_menu_item(restaurant_id,menu_id):
         flash('Menu Item Successfully Deleted')
         return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
     else:
-        return render_template('deleteMenuItem.html', item = item_to_delete)
+        return render_template('deletemenuitem.html', item = item_to_delete)
