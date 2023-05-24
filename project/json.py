@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from .models import Restaurant, menu_item
+from .models import Restaurant, menu_item, admin_login
 from sqlalchemy import text
 from . import db
 import json as pyjs
@@ -9,11 +9,9 @@ json = Blueprint('json', __name__)
 #JSON APIs to view Restaurant Information
 @json.route('/restaurant/<restaurant_id>/menu/JSON')
 def restaurant_menu_json(restaurant_id):
-
     items = db.session.execute(text('select * from menu_item where restaurant_id = %S', str(restaurant_id))) #changed sting building method to 
     items_list = [ i._asdict() for i in items ]
     return pyjs.dumps(items_list)
-
 
 @json.route('/restaurant/<restaurant_id>/menu/<int:menu_id>/JSON')
 def menu_item_json(restaurant_id, menu_id):
@@ -33,10 +31,28 @@ def request_restaurants_json():
     rest_list = [ r._asdict() for r in requested_restaurant ]
     return pyjs.dumps(rest_list)
 
-
 @json.route('/restaurant/search/<string:search_term>/JSON')
 def restaurant_menu_search_json(search_term):
     sql_request = text('select * from menu_item where restaurant_id = ' + str(search_term))
     restaurants = db.session.execute(sql_request) #changed sting building method to 
     rest_list = [ r._asdict() for r in restaurants ]
+    return pyjs.dumps(rest_list)
+
+#delete when release for viwing purposes only
+@json.route('/user/JSON')
+def user_login_json():
+    user_login = db.session.execute(text('select * from user_login'))
+    rest_list = [ r._asdict() for r in user_login ]
+    return pyjs.dumps(rest_list)
+
+@json.route('/user_restaurant/JSON')
+def restaurant_login_json():
+    restaurant_login = db.session.execute(text('select * from restaurant_login'))
+    rest_list = [ r._asdict() for r in restaurant_login ]
+    return pyjs.dumps(rest_list)
+
+@json.route('/admin/JSON')
+def admin_json():
+    admin_login = db.session.execute(text('select * from admin_login'))
+    rest_list = [ r._asdict() for r in admin_login ]
     return pyjs.dumps(rest_list)
