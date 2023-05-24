@@ -23,7 +23,7 @@ def login():
 @main.route('/restaurant/search/', methods=['GET'])
 def search_restaurants():
     search_term = request.args.get('query')
-    restaurants = db.session.query(Restaurant).filter_by(name=search_term).order_by(asc(Restaurant.name)).all()
+    restaurants = db.session.query(Restaurant).filter(Restaurant.name.like(f"%{search_term}%")).order_by(asc(Restaurant.name)).all()
     return render_template('restaurants.html', restaurants=restaurants)
 
 #Create a new restaurant
