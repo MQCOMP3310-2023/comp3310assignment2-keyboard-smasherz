@@ -12,7 +12,7 @@ class Restaurant(db.Model):
             'id'           : self.id,
         }
     
-class requestedRestaurant(db.Model):
+class requested_restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     address = db.Column(db.String(250), nullable=False)
@@ -47,3 +47,45 @@ class menu_item(db.Model):
             'course'     : self.course,
         }
 
+    
+class user_login(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
+
+    @property
+    def serialize(self):
+    #Return object data in easily serializeable format"""
+        return {
+            'username'         : self.username,
+            'password'      : self.password,
+            'id'           : self.id,
+        }
+    
+class restaurant_login(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
+
+    @property
+    def serialize(self):
+    #Return object data in easily serializeable format"""
+        return {
+            'username'         : self.username,
+            'password'      : self.password,
+            'id'           : self.id,
+        }
+    
+class admin_login(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
+
+    @property
+    def serialize(self):
+    #Return object data in easily serializeable format"""
+        return {
+            'username'         : self.username,
+            'password'      : self.password,
+            'id'           : self.id,
+        }
