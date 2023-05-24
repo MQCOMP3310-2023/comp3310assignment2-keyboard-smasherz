@@ -1,12 +1,23 @@
 <div class="row top-menu">
 	<div class="col-md-6">
 		<a href="{{url_for('main.show_restaurants')}}">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants  |
+		</a>
+		<a href="{{url_for('main.request_restaurant')}}">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Request Restaurant
 		</a>
 	</div>
 	<div class="col-md-6 text-right">
-			<p>Ch ch ch changes</p>
-					<p>Login Link will go Here </p>
+			<p>Ch ch ch ch changes</p>
+			<a href="{{url_for('main.login')}}">
+				<span aria-hidden="true"></span>Login Link go here
+			</a>
 		
+	</div>
+	<div>
+		<form action="/restaurant/search/" method="get">
+			<input type="text" name="query" class="search-bar" placeholder="Enter your search query">
+			<input type="submit" value="Search">
+		</form>
 	</div>
 </div>
