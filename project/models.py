@@ -47,3 +47,20 @@ class menu_item(db.Model):
             'course'     : self.course,
         }
 
+class user(db.Model):
+    email = db.Column(db.String(250), primary_key=True)
+    password = db.Column(db.String(250), nullable=False)
+    sessionToken = db.Column(db.String(250), nullable=False)
+    rOwner = db.Column(db.boolean(), nullable=False)
+    admin = db.Column(db.boolean(), nullable=False)
+
+    @property
+    def serialize(self):
+    #Return object data in easily serializeable format"""
+        return {
+            'email'         : self.email,
+            'password'      : self.password,
+            'sessionT'      : self.sessionToken,
+            'rOwner'        : self.rOwner,
+            'admin'         : self.admin
+        }

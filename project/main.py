@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, menu_item, requestedRestaurant
+from .models import Restaurant, menu_item, requestedRestaurant, user
 from sqlalchemy import asc
 from . import db
 
@@ -125,3 +125,27 @@ def delete_menu_item(restaurant_id,menu_id):
         return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
     else:
         return render_template('delete_menu_item.html', item = item_to_delete)
+
+
+@main.route('/login', methods=['GET','POST'])
+def login():
+  if request.method == 'POST':
+      user(email = request.form['email'])
+      user(password = request.form['password'])
+      flash('New User %s Successfully Created')
+      db.session.commit()
+      return redirect(url_for(main_show_restaurants))
+  else:
+      return render_template('loginNew.html')
+  
+@main.route('/login/new', methods=['GET','POST'])
+def new_login():
+  if request.method == 'POST':
+      user(email = request.form['email'])
+      user(password = request.form['password'])
+      db.session.add(new_restaurant)
+      flash('New User %s Successfully Created')
+      db.session.commit()
+      return redirect(url_for(main_show_restaurants))
+  else:
+      return render_template('loginNew.html')
