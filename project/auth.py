@@ -4,6 +4,7 @@ from flask_login import login_user, login_required, logout_user
 from .models import user
 from . import db
 from flask_login import login_user
+import re
 
 auth = Blueprint('auth', __name__)
 
@@ -32,6 +33,14 @@ def signup_post():
     name = request.form.get('name')
     password = request.form.get('password')
 
+    if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
+        flash('Invalid email address')
+        return redirect(url_for('main.show_restaurants'))
+    
+    if not re.search("[!@#$%^&*()\-_=+{};:,<.>]", password):
+        flash('Password must include at least one special character')
+        return redirect(url_for('main.show_restaurants'))
+
     User = user.query.filter_by(email=email).first()
 
     if User:
@@ -53,3 +62,25 @@ def logout():
     return redirect(url_for('main.show_restaurants'))
 
 
+@auth.route('/add', methods=['GET'])
+def add():
+    return render_template('add.html')
+
+@auth.route('/add', methods=['POST'])
+def admin_post():
+    role= request.form.get('role')
+    email = request.form.get('email')
+    name = request.form.get('name')
+    password = request.form.get('password')
+
+    User = user.query.filter_by(email=email).first()
+
+    if User:
+        flash('Email address already exists')
+        return redirect(url_for('main.show_restaurants'))
+
+    new_user = user(role=role, email=email, name=name, password=generate_password_hash(password, method='sha256'))
+
+    db.session.add(new_user)
+    db.session.commit()
+    return redirect(url_for('auth.login'))
