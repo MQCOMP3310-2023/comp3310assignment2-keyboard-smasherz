@@ -11,17 +11,25 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-1 padding-top">
-			<form action="#" method = "post">
-				<div class="form-group">
-				<label for="email">email:</label>
-				<input type ="text" class="form-control" maxlength="100" name="name">
-				<div class="padding-bottom"></div>
-				<label for="password">password:</label>
-				<input type ="text" class="form-control" maxlength="100" name="address">
-				<div class="padding-bottom"></div>
-				<button type="submit" class="btn btn-default" id="submit" type="submit">
-				<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Request</button>
-				</div>
+            <form method="POST" action="/login">
+			<div class="field">
+                <div class="control">
+                    <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="Your Password">
+                </div>
+            </div>
+            <!-- <div class="field"> -->
+                <!-- <label class="checkbox"> -->
+                    <!-- <input type="checkbox" name="remember"> -->
+                    <!-- Remember me -->
+                <!-- </label> -->
+            <!-- </div> -->
+            <button class="button is-block is-info is-large is-fullwidth">Login</button>
 			</form>
 		</div>
 	</div>

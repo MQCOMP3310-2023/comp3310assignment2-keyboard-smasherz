@@ -8,9 +8,21 @@
 		</a>
 	</div>
 	<div class="col-md-6 text-right">
-			<p>Ch ch ch ch changes</p>
-					<p>Login Link will go Here </p>
-		
+		<a href= "{{url_for('auth.login')}}">Login</a>
+		<a> | </a>
+		<a href= "{{url_for('auth.signup')}}">Sign Up</a>
+		{% if current_user.is_authenticated %}
+		<a> | </a>
+		{% endif %}
+		{% if current_user.is_authenticated %}
+		<a href= "{{url_for('main.profile')}}">Profile</a>
+		{% endif %}
+		{% if current_user.is_authenticated %}
+		<a> | </a>
+		{% endif %}
+		{% if current_user.is_authenticated %}
+		<a href= "{{url_for('auth.logout')}}">logout</a>
+		{% endif %}
 	</div>
 	<div>
 		<form action="/restaurant/search/" method="get">

@@ -1,4 +1,5 @@
 from . import db
+from flask_login import UserMixin
 
 class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -47,20 +48,9 @@ class menu_item(db.Model):
             'course'     : self.course,
         }
 
-class user(db.Model):
-    email = db.Column(db.String(250), primary_key=True)
-    password = db.Column(db.String(250), nullable=False)
-    sessionToken = db.Column(db.String(250), nullable=False)
-    rOwner = db.Column(db.boolean(), nullable=False)
-    admin = db.Column(db.boolean(), nullable=False)
-
-    @property
-    def serialize(self):
-    #Return object data in easily serializeable format"""
-        return {
-            'email'         : self.email,
-            'password'      : self.password,
-            'sessionT'      : self.sessionToken,
-            'rOwner'        : self.rOwner,
-            'admin'         : self.admin
-        }
+class user(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    role = db.Column(db.String(6))
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    name = db.Column(db.String(1000))

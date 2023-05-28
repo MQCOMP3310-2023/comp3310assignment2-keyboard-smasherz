@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import Restaurant, menu_item, requestedRestaurant, user
+from flask_login import login_required, current_user
 from sqlalchemy import asc
 from . import db
 
@@ -18,6 +19,7 @@ def show_restaurants():
 @main.route('/restaurant/search/', methods=['GET'])
 def search_restaurants():
     search_term = request.args.get('query')
+    search_t = "*"+search_term+"*"
     restaurants = db.session.query(Restaurant).filter_by(name=search_term).order_by(asc(Restaurant.name)).all()
     return render_template('restaurants.html', restaurants=restaurants)
 
@@ -35,6 +37,7 @@ def new_restaurant():
       return render_template('newRestaurant.html')
 
 @main.route('/restaurant/request/', methods=['GET','POST'])
+@login_required
 def request_restaurant():
   if request.method == 'POST':
       request_restaurant = requestedRestaurant(name = request.form['name'], address = request.form['address'])
@@ -127,25 +130,7 @@ def delete_menu_item(restaurant_id,menu_id):
         return render_template('delete_menu_item.html', item = item_to_delete)
 
 
-@main.route('/login', methods=['GET','POST'])
-def login():
-  if request.method == 'POST':
-      user(email = request.form['email'])
-      user(password = request.form['password'])
-      flash('New User %s Successfully Created')
-      db.session.commit()
-      return redirect(url_for(main_show_restaurants))
-  else:
-      return render_template('loginNew.html')
-  
-@main.route('/login/new', methods=['GET','POST'])
-def new_login():
-  if request.method == 'POST':
-      user(email = request.form['email'])
-      user(password = request.form['password'])
-      db.session.add(new_restaurant)
-      flash('New User %s Successfully Created')
-      db.session.commit()
-      return redirect(url_for(main_show_restaurants))
-  else:
-      return render_template('loginNew.html')
+@main.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.name, role=current_user.role)

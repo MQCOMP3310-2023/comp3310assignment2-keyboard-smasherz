@@ -1,5 +1,6 @@
 from project import db, create_app, models
-from project.models import Restaurant, menu_item
+from project.models import Restaurant, menu_item, user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def populate_db():
     #Menu for UrbanBurger
@@ -203,7 +204,11 @@ def populate_db():
     
     session.add(menu_item2)
     session.commit()
-    
+
+    admin_user = user(role = "admin", email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    db.session.add(admin_user)
+    session.commit()
+
     print("added menu items!")
 
 
