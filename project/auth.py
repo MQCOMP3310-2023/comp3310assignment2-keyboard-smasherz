@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, Flask
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
-from .models import user
+from flask_security import roles_accepted
+from .models import user, role, UserRoles
 from . import db
 from flask_login import login_user
 import re
@@ -44,13 +45,17 @@ def signup_post():
     User = user.query.filter_by(email=email).first()
 
     if User:
-        flash('Email address already exists')
+        flash('Email address is already in use')
         return redirect(url_for('main.show_restaurants'))
 
-    new_user = user(role='public', email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    public_role = role(name='public')
+
+    new_user = user(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
     db.session.add(new_user)
     db.session.commit()
+
+    new_user.roles = [public_role]
 
     return redirect(url_for('auth.login'))
 
@@ -63,10 +68,14 @@ def logout():
 
 
 @auth.route('/add', methods=['GET'])
+# @login_required
+@roles_accepted('admin')
 def add():
     return render_template('add.html')
 
 @auth.route('/add', methods=['POST'])
+@login_required
+@roles_accepted('admin')
 def admin_post():
     role= request.form.get('role')
     email = request.form.get('email')
@@ -78,9 +87,15 @@ def admin_post():
     if User:
         flash('Email address already exists')
         return redirect(url_for('main.show_restaurants'))
+    
+    role = role(name=role)
 
-    new_user = user(role=role, email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = user( email=email, name=name, password=generate_password_hash(password, method='sha256'))
+
 
     db.session.add(new_user)
     db.session.commit()
+
+    new_user.roles[role]
+
     return redirect(url_for('auth.login'))

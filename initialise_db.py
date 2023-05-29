@@ -1,5 +1,5 @@
 from project import db, create_app, models
-from project.models import Restaurant, menu_item, user
+from project.models import Restaurant, menu_item, user, role, UserRoles
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def populate_db():
@@ -205,11 +205,27 @@ def populate_db():
     session.add(menu_item2)
     session.commit()
 
-    admin_user = user(role = "admin", email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    print("added menu items!")
+
+    admin_role = role(name='admin')
+    session.commit()
+
+    admin_user = user(email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
     db.session.add(admin_user)
     session.commit()
 
-    print("added menu items!")
+    admin_user.roles = [admin_role]
+
+    public_role = role(name='public')
+
+    flick_user = user(email = "flick@flick.com", name = "flick", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    session.add(flick_user)
+    session.commit()
+
+    flick_user.roles = [public_role]
+    session.commit()
+
+    print("added Users!")
 
 
 if __name__ == '__main__':
