@@ -1,5 +1,5 @@
 from project import db, create_app, models
-from project.models import Restaurant, menu_item, user
+from project.models import Restaurant, menu_item, user, Role, user_roles
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def populate_db():
@@ -205,11 +205,40 @@ def populate_db():
     session.add(menu_item2)
     session.commit()
 
-    admin_user = user(role = "admin", email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
-    db.session.add(admin_user)
+    
+
+    admin_role = Role(name = "admin")
+    session.add(admin_role)
+    session.commit()
+
+    print(admin_role)
+
+    admin_user = user(email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    admin_user.roles.append(admin_role)
+    session.add(admin_user)
+    session.commit()
+
+    print(admin_user.roles)
+
+    admin_user.roles.append(admin_role)
+    session.commit()
+
+    public_role = Role(name ="public")
+    # session.add(public_role)
+    # session.commit()
+
+    flick_user = user(email = "flick@flick.com", name = "flick", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    flick_user.roles.append(public_role)
+    session.add(flick_user)
+    session.commit()
+
+    flick_user.roles.append(public_role)
     session.commit()
 
     print("added menu items!")
+    print("added Users!")
+
+    # print(flick_user.roles.name)
 
 
 if __name__ == '__main__':
