@@ -45,7 +45,7 @@ def signup_post():
     User = user.query.filter_by(email=email).first()
 
     if User:
-        flash('Email address is already in use')
+        flash('Email address already exists')
         return redirect(url_for('main.show_restaurants'))
 
     public_role = role(name='public')
@@ -54,8 +54,6 @@ def signup_post():
 
     db.session.add(new_user)
     db.session.commit()
-
-    new_user.roles = [public_role]
 
     return redirect(url_for('auth.login'))
 

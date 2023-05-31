@@ -1,4 +1,5 @@
 from . import db
+from flask import current_app
 from flask_login import UserMixin
 from flask_security import RoleMixin
 
@@ -55,15 +56,14 @@ class role(RoleMixin, db.Model):
     name = db.Column(db.String(50), unique=True)
 
 class user(UserMixin, db.Model):
-    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     roles = db.relationship('role', secondary='user_roles')
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
 
-class UserRoles(db.Model):
-    # __tablename__ = 'UserRoles'
+class user_roles(db.Model):
+    __tablename__ = 'user_roles'
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('Role.id', ondelete='CASCADE'))

@@ -1,5 +1,5 @@
 from project import db, create_app, models
-from project.models import Restaurant, menu_item, user, role, UserRoles
+from project.models import Restaurant, menu_item, user, Role, user_roles
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def populate_db():

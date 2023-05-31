@@ -133,4 +133,4 @@ def delete_menu_item(restaurant_id,menu_id):
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    return render_template('profile.html', name=current_user.name, role=current_user.role)
