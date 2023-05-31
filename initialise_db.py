@@ -207,24 +207,35 @@ def populate_db():
 
     print("added menu items!")
 
-    admin_role = role(name='admin')
+    admin_role = Role(name = "admin")
+    session.add(admin_role)
     session.commit()
+
+    print(admin_role)
 
     admin_user = user(email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
-    db.session.add(admin_user)
+    admin_user.roles.append(admin_role)
+    session.add(admin_user)
     session.commit()
 
-    admin_user.roles = [admin_role]
+    print(admin_user.roles)
 
-    public_role = role(name='public')
+    admin_user.roles.append(admin_role)
+    session.commit()
+
+    public_role = Role(name ="public")
+    # session.add(public_role)
+    # session.commit()
 
     flick_user = user(email = "flick@flick.com", name = "flick", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    flick_user.roles.append(public_role)
     session.add(flick_user)
     session.commit()
 
-    flick_user.roles = [public_role]
+    flick_user.roles.append(public_role)
     session.commit()
 
+    print("added menu items!")
     print("added Users!")
 
 

@@ -1,7 +1,7 @@
 from . import db
 from flask import current_app
 from flask_login import UserMixin
-from flask_security import RoleMixin
+from flask_security import Security, RoleMixin, SQLAlchemyUserDatastore
 
 class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,14 +50,14 @@ class menu_item(db.Model):
             'course'     : self.course,
         }
 
-class role(RoleMixin, db.Model):
-    __tablename__ = 'role'
+class Role(RoleMixin, db.Model):
+    __tablename__ = 'Role'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), unique=True)
 
 class user(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    roles = db.relationship('role', secondary='user_roles')
+    roles = db.relationship('Role', secondary='user_roles')
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))

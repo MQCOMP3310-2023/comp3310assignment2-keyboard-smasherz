@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, Flask
+from flask import current_app, Blueprint, render_template, request, flash, redirect, url_for, Flask
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
-from flask_security import roles_accepted
-from .models import user, role, UserRoles
+from flask_security import roles_accepted, Security
+from .models import user, Role, user_roles
 from . import db
 from flask_login import login_user
 import re
@@ -48,12 +48,14 @@ def signup_post():
         flash('Email address already exists')
         return redirect(url_for('main.show_restaurants'))
 
-    public_role = role(name='public')
-
+    public_role = Role(name='public')
+    
     new_user = user(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
     db.session.add(new_user)
     db.session.commit()
+
+    new_user.roles = [public_role]
 
     return redirect(url_for('auth.login'))
 
@@ -66,7 +68,7 @@ def logout():
 
 
 @auth.route('/add', methods=['GET'])
-# @login_required
+@login_required
 @roles_accepted('admin')
 def add():
     return render_template('add.html')
@@ -86,14 +88,15 @@ def admin_post():
         flash('Email address already exists')
         return redirect(url_for('main.show_restaurants'))
     
-    role = role(name=role)
+    role = Role(name=role)
 
-    new_user = user( email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = user(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
 
     db.session.add(new_user)
     db.session.commit()
 
     new_user.roles[role]
+    db.session.commit()
 
     return redirect(url_for('auth.login'))
