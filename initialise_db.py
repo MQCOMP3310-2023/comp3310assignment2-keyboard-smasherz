@@ -205,7 +205,7 @@ def populate_db():
     session.add(menu_item2)
     session.commit()
 
-    
+    print("added menu items!")
 
     admin_role = Role(name = "admin")
     session.add(admin_role)
@@ -224,8 +224,8 @@ def populate_db():
     session.commit()
 
     public_role = Role(name ="public")
-    # session.add(public_role)
-    # session.commit()
+    session.add(public_role)
+    session.commit()
 
     flick_user = user(email = "flick@flick.com", name = "flick", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
     flick_user.roles.append(public_role)
@@ -234,12 +234,20 @@ def populate_db():
 
     flick_user.roles.append(public_role)
     session.commit()
+    
+    rOwner_role = Role(name ="rOwner")
+    session.add(rOwner_role)
+    session.commit()
 
-    print("added menu items!")
+    rOwner_user = user(email = "gordon@ramsey.com", name = "gordon", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    rOwner_user.roles.append(rOwner_role)
+    session.add(rOwner_user)
+    session.commit()
+
+    flick_user.roles.append(rOwner_role)
+    session.commit()
+
     print("added Users!")
-
-    # print(flick_user.roles.name)
-
 
 if __name__ == '__main__':
   app = create_app()
