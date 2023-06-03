@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import Restaurant, menu_item, requestedRestaurant, user
 from flask_login import login_required, current_user
+from flask_security import roles_accepted, Security
 from sqlalchemy import asc
 from . import db
 
@@ -26,6 +27,8 @@ def search_restaurants():
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def new_restaurant():
   if request.method == 'POST':
       new_restaurant = Restaurant(name = request.form['name'])
@@ -50,6 +53,8 @@ def request_restaurant():
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def edit_restaurant(restaurant_id):
   edited_restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
   if request.method == 'POST':
@@ -63,6 +68,8 @@ def edit_restaurant(restaurant_id):
 
 #Delete a restaurant
 @main.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])
+@login_required
+@roles_accepted("admin")
 def delete_restaurant(restaurant_id):
   restaurant_to_delete = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
   if request.method == 'POST':
@@ -85,6 +92,8 @@ def show_menu(restaurant_id):
 
 #Create a new menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/new/',methods=['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def new_menu_item(restaurant_id):
   if request.method == 'POST':
       new_item = menu_item(name = request.form['name'], description = request.form['description'], price = request.form['price'], course = request.form['course'], restaurant_id = restaurant_id)
@@ -97,6 +106,8 @@ def new_menu_item(restaurant_id):
 
 #Edit a menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def edit_menu_item(restaurant_id, menu_id):
 
     edited_item = db.session.query(menu_item).filter_by(id = menu_id).one()
@@ -119,6 +130,8 @@ def edit_menu_item(restaurant_id, menu_id):
 
 #Delete a menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods = ['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def delete_menu_item(restaurant_id,menu_id):
     item_to_delete = db.session.query(menu_item).filter_by(id = menu_id).one() 
     if request.method == 'POST':
