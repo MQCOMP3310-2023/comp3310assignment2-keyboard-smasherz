@@ -3,6 +3,7 @@ from .models import Restaurant, menu_item, requestedRestaurant, user
 from flask_login import login_required, current_user
 from sqlalchemy import asc
 from . import db
+import logging
 
 main = Blueprint('main', __name__)
 main_show_restaurants = 'main.show_restaurants'

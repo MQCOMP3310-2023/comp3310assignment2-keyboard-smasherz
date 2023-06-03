@@ -2,6 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_security import Security
+from dotenv import load_dotenv
+load_dotenv()
+import os
+import logging
+
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
@@ -9,9 +14,9 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'secret-key-do-not-reveal'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///restaurantmenu.db'
-
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    logging.basicConfig(filename='app.log', filemode="w", level=logging.INFO)
     db.init_app(app)
 
     # blueprint for json routes in our app
