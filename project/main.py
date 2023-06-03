@@ -32,7 +32,12 @@ def manage_users():
 @main.route('/restaurant/search/', methods=['GET'])
 def search_restaurants():
     search_term = request.args.get('query')
-    restaurants = db.session.query(Restaurant).filter(Restaurant.name.like(f"%{search_term}%")).order_by(asc(Restaurant.name)).all()
+    search_pattern = f"%{search_term}%"
+    restaurants = db.session.query(Restaurant).filter(Restaurant.name.like(search_pattern)).order_by(asc(Restaurant.name)).all()
+
+    if not restaurants:
+        flash("No restaurants found. Plase try again")
+
     return render_template('restaurants.html', restaurants=restaurants)
 
 #Create a new restaurant
