@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from flask_security import roles_accepted, Security
 from sqlalchemy import asc
 from . import db
+import logging
 
 main = Blueprint('main', __name__)
 main_show_restaurants = 'main.show_restaurants'
@@ -38,7 +39,7 @@ def search_restaurants():
     restaurants = db.session.query(Restaurant).filter(Restaurant.name.like(search_pattern)).order_by(asc(Restaurant.name)).all()
 
     if not restaurants:
-        flash("No restaurants found. Plase try again")
+        flash("No restaurants found. Please try again")
 
     return render_template('restaurants.html', restaurants=restaurants)
 
@@ -52,6 +53,7 @@ def new_restaurant():
         if request.method == 'POST':
             new_restaurant = Restaurant(name = request.form['name'])
             db.session.add(new_restaurant)
+            logging.info(f'{new_restaurant.name} added')
             flash('New Restaurant %s Successfully Created' % new_restaurant.name)
             db.session.commit()
             return redirect(url_for(main_show_restaurants))
@@ -65,6 +67,7 @@ def request_restaurant():
     if request.method == 'POST':
         request_restaurant = requested_restaurant(name = request.form['name'], address = request.form['address'])
         db.session.add(request_restaurant)
+        logging.info(f'{request_restaurant.name} request added')
         flash('New Restaurant %s Successfully Requested' % request_restaurant.name)
         db.session.commit()
         return redirect(url_for(main_show_restaurants))
@@ -82,6 +85,7 @@ def edit_restaurant(restaurant_id):
         if request.method == 'POST':
             if request.form['name']:
                 edited_restaurant.name = request.form['name']
+                logging.info(f'{edited_restaurant.name} name edited')
                 flash('Restaurant Successfully Edited %s' % edited_restaurant.name)
                 return redirect(url_for(main_show_restaurants))
         else:
@@ -98,6 +102,7 @@ def delete_restaurant(restaurant_id):
         restaurant_to_delete = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
         if request.method == 'POST':
             db.session.delete(restaurant_to_delete)
+            logging.info(f'{restaurant_to_delete.name} deleted') 
             flash('%s Successfully Deleted' % restaurant_to_delete.name)
             db.session.commit()
             return redirect(url_for(main_show_restaurants, restaurant_id = restaurant_id))
@@ -126,6 +131,7 @@ def new_menu_item(restaurant_id):
             new_item = menu_item(name = request.form['name'], description = request.form['description'], price = request.form['price'], course = request.form['course'], restaurant_id = restaurant_id)
             db.session.add(new_item)
             db.session.commit()
+            logging.info(f'{new_item.name} item added') 
             flash('New Menu %s Item Successfully Created' % (new_item.name))
             return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
         else:
@@ -150,6 +156,7 @@ def edit_menu_item(restaurant_id, menu_id):
                 edited_item.course = request.form['course']
             db.session.add(edited_item)
             db.session.commit() 
+            logging.info(f'{edited_item.name} item edited') 
             flash('Menu Item Successfully Edited')
             return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
         else:
@@ -165,6 +172,7 @@ def delete_menu_item(restaurant_id,menu_id):
     if request.method == 'POST':
         db.session.delete(item_to_delete)
         db.session.commit()
+        logging.info(f'{item_to_delete} item deleted') 
         flash('Menu Item Successfully Deleted')
         return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
     else:

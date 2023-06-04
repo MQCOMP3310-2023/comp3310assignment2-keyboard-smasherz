@@ -6,6 +6,7 @@ from .models import user, Role, user_roles
 from . import db
 from flask_login import login_user
 import re
+import logging
 
 auth = Blueprint('auth', __name__)
 
@@ -19,9 +20,11 @@ def login_post():
     password = request.form.get('password')
     User = user.query.filter_by(email=email).first()
     if not User or not check_password_hash(User.password, password):
+        logging.error(f'{email} login failed ')
         flash('Please check your login details and try again.')
         return redirect(url_for('main.show_restaurants'))
     login_user(User)
+    logging.info(f'{email} logged in')
     return redirect(url_for('main.profile'))
 
 @auth.route('/signup', methods=['GET'])
@@ -45,13 +48,14 @@ def signup_post():
     User = user.query.filter_by(email=email).first()
 
     if User:
-        flash('Email address is already in use')
+        flash('Email address already exists')
+        logging.error(f'{email} {name} already exists')
         return redirect(url_for('main.show_restaurants'))
 
     public_role = Role(name='public')
 
     new_user = user(email=email, name=name, password=generate_password_hash(password, method='sha256'))
-
+    logging.info(f'{new_user.name} {new_user.email} user created')
     db.session.add(new_user)
     db.session.commit()
 
@@ -86,6 +90,7 @@ def admin_post():
 
     if User:
         flash('Email address already exists')
+        logging.error(f'{User} admin already exists')
         return redirect(url_for('main.show_restaurants'))
     
     role = Role(name=role)
