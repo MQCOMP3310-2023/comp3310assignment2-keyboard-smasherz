@@ -82,16 +82,6 @@ def edit_restaurant(restaurant_id):
     access = authenticate_session()
     if access: #Admin or Restaurant Owner onl
         edited_restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
-<<<<<<< Updated upstream
-        if request.method == 'POST':
-            if request.form['name']:
-                edited_restaurant.name = request.form['name']
-                logging.info(f'{edited_restaurant.name} name edited')
-                flash('Restaurant Successfully Edited %s' % edited_restaurant.name)
-                return redirect(url_for(main_show_restaurants))
-        else:
-            return render_template('editRestaurant.html', restaurant = edited_restaurant)
-=======
         if (current_user.resturant == edited_restaurant.name) or (current_user.resturant == "admin"):
             if request.method == 'POST':
                 if request.form['name']:
@@ -103,7 +93,6 @@ def edit_restaurant(restaurant_id):
         else: 
             flash('You do not own this restaurant!')
             return redirect(url_for('main.show_restaurants'))
->>>>>>> Stashed changes
 
 
 #Delete a restaurant
