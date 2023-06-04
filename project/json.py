@@ -49,22 +49,3 @@ def restaurant_menu_search_json(search_term):
     restaurants = db.session.execute(sql_request) #changed sting building method to 
     rest_list = [ r._asdict() for r in restaurants ]
     return pyjs.dumps(rest_list)
-
-#delete when release for viwing purposes only
-@json.route('/user/JSON')
-def user_login_json():
-    user_login = db.session.execute(text('select * from user_login'))
-    rest_list = [ r._asdict() for r in user_login ]
-    return pyjs.dumps(rest_list)
-
-@json.route('/user_restaurant/JSON')
-def restaurant_login_json():
-    restaurant_login = db.session.execute(text('select * from restaurant_login'))
-    rest_list = [ r._asdict() for r in restaurant_login ]
-    return pyjs.dumps(rest_list)
-
-@json.route('/admin/JSON')
-def admin_json():
-    admin_login = db.session.execute(text('select * from admin_login'))
-    rest_list = [ r._asdict() for r in admin_login ]
-    return pyjs.dumps(rest_list)

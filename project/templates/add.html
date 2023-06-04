@@ -6,21 +6,27 @@
 	</div>
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
-			<h1>Create New User</h1>
+			<h1>Admin Create Or Edit User</h1>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-1 padding-top">
-			<form method="POST" action="/signup">
-				<div class="field">
-					<div class="control">
-						<input class="input is-large" type="role" name="role" placeholder="role" autofocus="">
-					</div>
+			
+			<div class="field">
+				<div class="control">
+					<input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
+					<a>Email Required</a>
 				</div>
+			</div>
 
+			<form method="POST" action="/add">
 				<div class="field">
 					<div class="control">
-						<input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
+						<input class="input is-large" type="role" name="role" placeholder="Role" autofocus="">
+						<a>Role Options are:</a>
+						<a>  admin  |</a>
+						<a>  rOwner |</a>
+						<a>  public  </a>
 					</div>
 				</div>
 	
@@ -38,11 +44,13 @@
 
 				<div class="field">
 					<div class="control">
-						<input class="input is-large" type="resturant" name="resturant" placeholder="resturant if owner">
+						<input class="input is-large" type="restaurant" name="restaurant" placeholder="restaurant if owner">
+						<a>Restaurant only used if an rOwner, Must match restaurant name.</a>
+						<a>if user is an admin set to "admin"</a>
 					</div>
 				</div>
 	
-				<button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
+				<button class="button is-block is-info is-large is-fullwidth">Add / Edit</button>
 			</form>
 		</div>
 	</div>

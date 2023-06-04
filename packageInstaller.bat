@@ -5,3 +5,4 @@ py -m pip install flask_login
 py -m pip install flask_security 
 py -m pip install email_validator
 py -m pip install flask_SQLAlchemy
+py -m pip install python-dotenv

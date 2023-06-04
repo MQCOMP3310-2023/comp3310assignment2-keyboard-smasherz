@@ -133,8 +133,6 @@ def show_menu(restaurant_id):
 def new_menu_item(restaurant_id):
     access = authenticate_session()
     edited_restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
-    logging.info(f'{current_user.restaurant} item added') 
-    logging.info(f'{edited_restaurant.name} item added') 
     if access: #Admin or Restaurant Owner only
         if (current_user.restaurant == edited_restaurant.name) or (current_user.restaurant == "admin"):
             if request.method == 'POST':

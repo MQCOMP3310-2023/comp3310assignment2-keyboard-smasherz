@@ -1,6 +1,6 @@
 from flask import current_app, Blueprint, render_template, request, flash, redirect, url_for, Flask
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from flask_security import roles_accepted, Security
 from .models import user, Role, user_roles
 from . import db
@@ -79,29 +79,48 @@ def add():
 
 @auth.route('/add', methods=['POST'])
 @login_required
-@roles_accepted("admin")
+@roles_accepted('admin')
 def admin_post():
     role= request.form.get('role')
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
+    restaurant = request.form.get('restaurant')
 
-    User = user.query.filter_by(email=email).first()
+    User = db.session.query(user).filter_by(email=email).one()
 
     if User:
-        flash('Email address already exists')
-        logging.error(f'{User} admin already exists')
-        return redirect(url_for('main.show_restaurants'))
+        if role and (role == 'admin' or role == 'rOwner' or role == 'public'):
+            role_obj = db.session.query(Role).filter_by(name=role).one()
+            relation_user = db.session.query(user_roles).filter_by(user_id=User.id).one()
+            logging.info(f'{User.roles} {role_obj.name} User Role Orginal')
+            
+            User.roles.append(role_obj)
+            db.session.commit()
+            logging.info(f'{User.roles} {role_obj} User Role Updated')
+
+        if name:
+            User.name = name
+            db.session.commit()
+        if password:
+            User.password = generate_password_hash(password, method='sha256')
+            db.session.commit()
+        if restaurant:
+            logging.info(f'{restaurant} {User.name} Res Orignal')
+            User.restaurant = restaurant
+            logging.info(f'{User.restaurant} {User.name} User Res Updated')
+            db.session.commit()
     
-    role = Role(name=role)
+    else: 
+        role = db.session.query(Role).filter_by(name=role).one()
 
-    new_user = user(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+        new_user = user(email=email, name=name, password=generate_password_hash(password, method='sha256'), restaurant=restaurant)
 
 
-    db.session.add(new_user)
-    db.session.commit()
+        db.session.add(new_user)
+        db.session.commit()
 
-    new_user.roles[role]
-    db.session.commit()
+        new_user.roles[role]
+        db.session.commit()
 
     return redirect(url_for('auth.login'))
