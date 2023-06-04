@@ -20,8 +20,8 @@ def show_restaurants():
 @main.route('/restaurant/search/', methods=['GET'])
 def search_restaurants():
     search_term = request.args.get('query')
-    search_t = "*"+search_term+"*"
-    restaurants = db.session.query(Restaurant).filter_by(name=search_term).order_by(asc(Restaurant.name)).all()
+    search_pattern = f"%{search_term}%"
+    restaurants = db.session.query(Restaurant).filter(Restaurant.name.like(search_pattern)).order_by(asc(Restaurant.name)).all()
     return render_template('restaurants.html', restaurants=restaurants)
 
 

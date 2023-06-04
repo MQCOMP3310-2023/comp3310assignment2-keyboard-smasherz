@@ -218,8 +218,6 @@ def populate_db():
     session.add(admin_user)
     session.commit()
 
-    print(admin_user.roles)
-
     admin_user.roles.append(admin_role)
     session.commit()
 
