@@ -26,11 +26,6 @@ def authenticate_session(admin=False):
     # if browsercookie == validsessioncookie
     return True
 
-@main.route('/admin') # Admin dashboard, doesn't exist yet but this is where they might "add, edit or delete restaurant owners"
-def manage_users():
-    access = authenticate_session(admin=True) # This is the only page requiring admin privileges
-    pass
-
 #Search for restaurants
 @main.route('/restaurant/search/', methods=['GET'])
 def search_restaurants():

@@ -68,6 +68,7 @@ def signup_post():
 @login_required
 def logout():
     logout_user()
+    flash('You have been Logged out! come back soon :)')
     return redirect(url_for('main.show_restaurants'))
 
 
