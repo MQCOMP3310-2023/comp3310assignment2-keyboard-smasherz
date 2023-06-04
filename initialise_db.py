@@ -244,7 +244,7 @@ def populate_db():
     session.add(rOwner_user)
     session.commit()
 
-    flick_user.roles.append(rOwner_role)
+    rOwner_user.roles.append(rOwner_role)
     session.commit()
 
     print("added Users!")
