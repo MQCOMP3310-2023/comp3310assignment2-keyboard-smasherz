@@ -22,6 +22,8 @@ You should have at least the following versions installed:
 
 You will also need sqlite installed for the database backend.
 
+You can also use the packageInstaller.bat file to install all required packages as long as pip is installed and python is added to path
+
 # Initialising the database
 
 You should first initialise the database as follows:
