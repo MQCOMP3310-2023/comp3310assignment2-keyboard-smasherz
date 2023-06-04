@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, menu_item, requested_restaurant
+from .models import Restaurant, menu_item, requested_Restaurant, user
+from flask_login import login_required, current_user
+from flask_security import roles_accepted, Security
 from sqlalchemy import asc
 from . import db
 
@@ -42,6 +44,8 @@ def search_restaurants():
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def new_restaurant():
     access = authenticate_session()
     if access: #Admin or Restaurant Owner only
@@ -56,6 +60,7 @@ def new_restaurant():
 
 #Request new restaurant 
 @main.route('/restaurant/request/', methods=['GET','POST'])
+@login_required
 def request_restaurant():
     if request.method == 'POST':
         request_restaurant = requested_restaurant(name = request.form['name'], address = request.form['address'])
@@ -68,6 +73,8 @@ def request_restaurant():
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def edit_restaurant(restaurant_id):
     access = authenticate_session()
     if access: #Admin or Restaurant Owner only
@@ -83,6 +90,8 @@ def edit_restaurant(restaurant_id):
 
 #Delete a restaurant
 @main.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])
+@login_required
+@roles_accepted("admin")
 def delete_restaurant(restaurant_id):
     access = authenticate_session() 
     if access: #Admin or Restaurant Owner only
@@ -108,6 +117,8 @@ def show_menu(restaurant_id):
 
 #Create a new menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/new/',methods=['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def new_menu_item(restaurant_id):
     access = authenticate_session()
     if access: #Admin or Restaurant Owner only
@@ -122,6 +133,8 @@ def new_menu_item(restaurant_id):
 
 #Edit a menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def edit_menu_item(restaurant_id, menu_id):
     access = authenticate_session()
     if access: #Admin or Restaurant Owner only
@@ -145,14 +158,20 @@ def edit_menu_item(restaurant_id, menu_id):
 
 #Delete a menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods = ['GET','POST'])
+@login_required
+@roles_accepted("rOwner","admin")
 def delete_menu_item(restaurant_id,menu_id):
-    access = authenticate_session()
-    if access: #Admin or Restaurant Owner only
-        item_to_delete = db.session.query(menu_item).filter_by(id = menu_id).one() 
-        if request.method == 'POST':
-            db.session.delete(item_to_delete)
-            db.session.commit()
-            flash('Menu Item Successfully Deleted')
-            return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
-        else:
-            return render_template('deletemenuitem.html', item = item_to_delete)
+    item_to_delete = db.session.query(menu_item).filter_by(id = menu_id).one() 
+    if request.method == 'POST':
+        db.session.delete(item_to_delete)
+        db.session.commit()
+        flash('Menu Item Successfully Deleted')
+        return redirect(url_for(main_show_menu, restaurant_id = restaurant_id))
+    else:
+        return render_template('delete_menu_item.html', item = item_to_delete)
+
+
+@main.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.name)

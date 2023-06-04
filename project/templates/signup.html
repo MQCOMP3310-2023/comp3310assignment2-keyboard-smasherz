@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row divider green">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner menu">
+		<div class="col-md-11 col-md-offset-1 padding-none">
+			<h1>Create New User</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form method="POST" action="/signup">
+				<div class="field">
+					<div class="control">
+						<input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
+					</div>
+				</div>
+	
+				<div class="field">
+					<div class="control">
+						<input class="input is-large" type="text" name="name" placeholder="Name" autofocus="">
+					</div>
+				</div>
+	
+				<div class="field">
+					<div class="control">
+						<input class="input is-large" type="password" name="password" placeholder="Password">
+					</div>
+				</div>
+	
+				<button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+
+
