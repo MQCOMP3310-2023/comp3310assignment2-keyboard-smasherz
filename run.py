@@ -3,6 +3,7 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from project import db
 from project.models import user, Role
 
+
 if __name__ == '__main__':
   app = create_app()
   user_datastore = SQLAlchemyUserDatastore(db, user, Role)
