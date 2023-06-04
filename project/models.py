@@ -60,8 +60,9 @@ class user(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     roles = db.relationship('Role', secondary='user_roles')
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    name = db.Column(db.String(1000))
+    password = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(1000), nullable=False)
+    restaurant = db.Column(db.String(250), nullable=True)
 
 class user_roles(db.Model):
     __tablename__ = 'user_roles'

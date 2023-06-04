@@ -213,7 +213,7 @@ def populate_db():
 
     print(admin_role)
 
-    admin_user = user(email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
+    admin_user = user(email = "admin@admin", name = "admin", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c", restaurant = "admin")
     admin_user.roles.append(admin_role)
     session.add(admin_user)
     session.commit()
@@ -237,12 +237,28 @@ def populate_db():
     session.add(rOwner_role)
     session.commit()
 
-    rOwner_user = user(email = "gordon@ramsey.com", name = "gordon", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c" )
-    rOwner_user.roles.append(rOwner_role)
-    session.add(rOwner_user)
+    rOwner_user1 = user(email = "gordon@ramsey.com", name = "gordon", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c", restaurant="Urban Burger")
+    rOwner_user1.roles.append(rOwner_role)
+    session.add(rOwner_user1)
     session.commit()
 
-    rOwner_user.roles.append(rOwner_role)
+    rOwner_user1.roles.append(rOwner_role)
+    session.commit()
+
+    rOwner_user2 = user(email = "guy@fieri.com", name = "guy", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c", restaurant="Panda Garden")
+    rOwner_user2.roles.append(rOwner_role)
+    session.add(rOwner_user1)
+    session.commit()
+
+    rOwner_user2.roles.append(rOwner_role)
+    session.commit()
+
+    rOwner_user3 = user(email = "jamie@oliver.com", name = "jamie@ha", password="sha256$dDxGS2tA82OPIrmg$820ec990912d5339c303d945776e852db8ca1f27201fbf47a18c2e6b4d0dbd8c", restaurant="Super Stir Fry")
+    rOwner_user3.roles.append(rOwner_role)
+    session.add(rOwner_user3)
+    session.commit()
+
+    rOwner_user3.roles.append(rOwner_role)
     session.commit()
 
     print("added Users!")

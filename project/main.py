@@ -46,7 +46,7 @@ def search_restaurants():
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
 @login_required
-@roles_accepted("rOwner","admin")
+@roles_accepted("admin")
 def new_restaurant():
     access = authenticate_session()
     if access: #Admin or Restaurant Owner only
@@ -80,8 +80,9 @@ def request_restaurant():
 @roles_accepted("rOwner","admin")
 def edit_restaurant(restaurant_id):
     access = authenticate_session()
-    if access: #Admin or Restaurant Owner only
+    if access: #Admin or Restaurant Owner onl
         edited_restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
+<<<<<<< Updated upstream
         if request.method == 'POST':
             if request.form['name']:
                 edited_restaurant.name = request.form['name']
@@ -90,6 +91,19 @@ def edit_restaurant(restaurant_id):
                 return redirect(url_for(main_show_restaurants))
         else:
             return render_template('editRestaurant.html', restaurant = edited_restaurant)
+=======
+        if (current_user.resturant == edited_restaurant.name) or (current_user.resturant == "admin"):
+            if request.method == 'POST':
+                if request.form['name']:
+                    edited_restaurant.name = request.form['name']
+                    flash('Restaurant Successfully Edited %s' % edited_restaurant.name)
+                    return redirect(url_for(main_show_restaurants))
+            else:
+                return render_template('editRestaurant.html', restaurant = edited_restaurant)
+        else: 
+            flash('You do not own this restaurant!')
+            return redirect(url_for('main.show_restaurants'))
+>>>>>>> Stashed changes
 
 
 #Delete a restaurant
