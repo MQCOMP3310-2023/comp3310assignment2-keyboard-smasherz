@@ -21,7 +21,7 @@ def login_post():
     User = user.query.filter_by(email=email).first()
     if not User or not check_password_hash(User.password, password):
         logging.error(f'{email} login failed ')
-        flash('Please check your login details and try again.')
+        flash('Please check your Credentials and try again.')
         return redirect(url_for('main.show_restaurants'))
     login_user(User)
     logging.info(f'{email} logged in')
@@ -48,7 +48,7 @@ def signup_post():
     User = user.query.filter_by(email=email).first()
 
     if User:
-        flash('Email address already exists')
+        flash('User/Email already exists')
         logging.error(f'{email} {name} already exists')
         return redirect(url_for('main.show_restaurants'))
 
