@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from .models import Restaurant, menu_item, admin_login
+from .models import Restaurant, menu_item
 from flask_login import login_required, current_user
 from flask_security import roles_accepted, Security
 from sqlalchemy import text

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, menu_item, requested_Restaurant, user
+from .models import Restaurant, menu_item, requested_restaurant, user
 from flask_login import login_required, current_user
 from flask_security import roles_accepted, Security
 from sqlalchemy import asc
