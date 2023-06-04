@@ -34,9 +34,11 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-none">
 			<a href="{{url_for('main.new_restaurant')}}">
+				{% if current_user.is_authenticated %}
 				<button class="btn btn-default" id="new-restaurant">
 					<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Restaurant
 				</button>
+				{% endif %}
 			</a>
 		</div>
 		<div class="col-md-1"></div>
